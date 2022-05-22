@@ -335,51 +335,51 @@ End of Walkthrough
 
     - Add a new dependency to the 'pom.xml' for implementing roles and permissions:
 
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>28.1-jre</version>
-        </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>28.1-jre</version>
+            </dependency>
 
     - Create a new 'ApplicationUserRole' Enum class in the 'security' package:
 
-        import com.google.common.collect.Sets;
-        import java.util.Set;
-        import static ... .security.ApplicationUserPermission.*;
+            import com.google.common.collect.Sets;
+            import java.util.Set;
+            import static ... .security.ApplicationUserPermission.*;
 
-        public enum ApplicationUserRole {
-            STUDENT(Sets.newHashSet()),
-            ADMIN(Sets.newHashSet(COURSE_READ, COURSE_WRITE, STUDENT_READ, STUDENT_WRITE));
+            public enum ApplicationUserRole {
+                STUDENT(Sets.newHashSet()),
+                ADMIN(Sets.newHashSet(COURSE_READ, COURSE_WRITE, STUDENT_READ, STUDENT_WRITE));
 
-            private final Set<ApplicationUserPermission> permissions;
+                private final Set<ApplicationUserPermission> permissions;
 
-            ApplicationUserRole(Set<ApplicationUserPermission> permissions) {
-                this.permissions = permissions;
+                ApplicationUserRole(Set<ApplicationUserPermission> permissions) {
+                    this.permissions = permissions;
+                }
+
+                public Set<ApplicationUserPermission> getPermissions() {
+                    return permissions;
+                }
             }
-
-            public Set<ApplicationUserPermission> getPermissions() {
-                return permissions;
-            }
-        }
 
     - Create new 'ApplicationUserPermission' Enum class in the 'security' package:
 
-        public enum ApplicationUserPermission {
-            STUDENT_READ("student:read"),
-            STUDENT_WRITE("student:write"),
-            COURSE_READ("course:read"),
-            COURSE_WRITE("course:write");
+            public enum ApplicationUserPermission {
+                STUDENT_READ("student:read"),
+                STUDENT_WRITE("student:write"),
+                COURSE_READ("course:read"),
+                COURSE_WRITE("course:write");
 
-            private final String permission;
+                private final String permission;
 
-            ApplicationUserPermission(String permission) {
-                this.permission = permission;
+                ApplicationUserPermission(String permission) {
+                    this.permission = permission;
+                }
+
+                public String getPermission() {
+                    return permission;
+                }
             }
-
-            public String getPermission() {
-                return permission;
-            }
-        }
 
     - Replace the student and admin '.roles()' in the 'UserDetailsService' of the 'ApplicationSecurityConfig' class
         with the appropriate roles:
@@ -741,13 +741,13 @@ End of Walkthrough
 
     - Modify the line that disables the CSRF protection in 'configure' of 'ApplicationSecurityConfig' class to generate CSRF token:
 
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .csrf((csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())))
-                    .authorizeRequests()
-                    .antMatchers(...)
+            protected void configure(HttpSecurity http) throws Exception {
+                http
+                        .csrf((csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())))
+                        .authorizeRequests()
+                        .antMatchers(...)
 
-        //...
+            //...
     
     - Inside of Postman, we get the generated token from Cookies:
 
